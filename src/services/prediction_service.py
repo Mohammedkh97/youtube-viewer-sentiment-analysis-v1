@@ -51,8 +51,8 @@ class PredictionService:
             confidence = float(np.max(probabilities[i]))
             sentiment = self.label_encoder.inverse_transform([pred_idx])[0]
             
-            # Optionally map int categories back to readable labels if needed
-            sentiment_map = {0: "negative", 1: "neutral", 2: "positive"}
+            # In data_ingestion.py, the mapping was: -1(negative)->2, 0(neutral)->0, 1(positive)->1
+            sentiment_map = {0: "neutral", 1: "positive", 2: "negative"}
             sentiment_label = sentiment_map.get(sentiment, str(sentiment))
             
             results.append({
