@@ -29,6 +29,7 @@ debugpy==1.8.20
 decorator==5.2.1
 docker==7.1.0
 docutils==0.19
+dvc-s3==3.1.0
 executing==2.2.1
 fastapi==0.136.0
 filelock==3.28.0
