@@ -1,0 +1,122 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion
+    deps:
+    - path: src/data/data_ingestion.py
+      hash: md5
+      md5: 3a86c918b841c71f4de6b2f30db18495
+      size: 1818
+    params:
+      params.yaml:
+        data_ingestion.test_size: 0.2
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 3b913182142b65ddbaaf5698af6460ea.dir
+      size: 6917928
+      nfiles: 2
+  data_preprocessing:
+    cmd: python -m src.data.data_preprocessing
+    deps:
+    - path: data/raw/test.csv
+      hash: md5
+      md5: 87bf70265a3f853c17c1dd7377efe50f
+      size: 1386753
+    - path: data/raw/train.csv
+      hash: md5
+      md5: 2a7c1feb0f4bc00c4c465e4ba0127b20
+      size: 5531175
+    - path: src/data/data_preprocessing.py
+      hash: md5
+      md5: 17da866bd01cf8444a345b685f29faee
+      size: 1524
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 1693286253a3d8706919f77df506e0e7.dir
+      size: 5127450
+      nfiles: 2
+  model_building:
+    cmd: python -m src.model.model_building
+    deps:
+    - path: data/processed/train_processed.csv
+      hash: md5
+      md5: 3fc16edbeff0e480a140d4fd33e168c1
+      size: 4099361
+    - path: src/model/model_building.py
+      hash: md5
+      md5: ea7cec2bebf348f8db0d6adc7147065d
+      size: 3547
+    params:
+      params.yaml:
+        bayesian_tuning.cv_strategy: stratified_kfold
+        bayesian_tuning.model_name: lightgbm
+        bayesian_tuning.n_splits: 5
+        bayesian_tuning.n_trials: 30
+        bayesian_tuning.search_strategy: bayesian
+        model_training.imbalance_method: oversampling
+        model_training.learning_rate: 0.09
+        model_training.max_depth: 20
+        model_training.max_features: 10000
+        model_training.n_estimators: 367
+        model_training.ngram_range:
+        - 1
+        - 3
+        model_training.vectorizer: tfidf
+    outs:
+    - path: artifacts/label_encoder.joblib
+      hash: md5
+      md5: eed63fbde0a0a7ec83edcddc18934c8d
+      size: 351
+    - path: artifacts/model.joblib
+      hash: md5
+      md5: 9fd5b26aab59c5e2ff5afa43c083d659
+      size: 13934172
+    - path: artifacts/preprocessor.joblib
+      hash: md5
+      md5: dc1a10362590f2b3040e7c8eabf2f5c0
+      size: 384036
+  model_evaluation:
+    cmd: python -m src.model.model_evaluation
+    deps:
+    - path: artifacts/label_encoder.joblib
+      hash: md5
+      md5: eed63fbde0a0a7ec83edcddc18934c8d
+      size: 351
+    - path: artifacts/model.joblib
+      hash: md5
+      md5: 9fd5b26aab59c5e2ff5afa43c083d659
+      size: 13934172
+    - path: artifacts/preprocessor.joblib
+      hash: md5
+      md5: dc1a10362590f2b3040e7c8eabf2f5c0
+      size: 384036
+    - path: data/processed/test_processed.csv
+      hash: md5
+      md5: b21c1594dcb61480701bb818208f7e3f
+      size: 1028089
+    - path: data/processed/train_processed.csv
+      hash: md5
+      md5: 3fc16edbeff0e480a140d4fd33e168c1
+      size: 4099361
+    - path: src/model/model_evaluation.py
+      hash: md5
+      md5: abe5c0b636e7192229790f2d0f786609
+      size: 2672
+    outs:
+    - path: metrics/experiment_info.json
+      hash: md5
+      md5: a3a71cb1bc5aa06f8f9f391a5b9408a6
+      size: 1066
+  model_registration:
+    cmd: python -m src.model.register_model
+    deps:
+    - path: metrics/experiment_info.json
+      hash: md5
+      md5: a3a71cb1bc5aa06f8f9f391a5b9408a6
+      size: 1066
+    - path: src/model/register_model.py
+      hash: md5
+      md5: da195acdda3f5664d454dd9c710bf1f4
+      size: 2041
