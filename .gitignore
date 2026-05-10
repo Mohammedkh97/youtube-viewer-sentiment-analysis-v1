@@ -169,4 +169,42 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
-/experiment_info.json
+
+# ============================================
+# Project-Specific Ignores
+# ============================================
+
+# --- DVC Data Directories ---
+data/raw/
+data/processed/
+
+# --- ML Artifacts ---
+artifacts/
+*.joblib
+*.pkl
+metrics/
+
+# --- MLflow ---
+mlruns/
+mlflow.db
+
+# --- Notebooks Data & Outputs ---
+notebooks/data/
+notebooks/artifacts/
+notebooks/confusion_matrix.png
+
+# --- Docker ---
+docker-compose.override.yml
+
+# --- IDE / Editor ---
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --- OS Files ---
+Thumbs.db
+.DS_Store
+
+# --- Scratch / Temp ---
+scratch.py
