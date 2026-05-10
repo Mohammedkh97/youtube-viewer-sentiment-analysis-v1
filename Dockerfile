@@ -25,7 +25,7 @@ RUN pip install --upgrade pip && \
 COPY src/ /app/src/
 COPY app/ /app/app/
 COPY params.yaml .
-COPY .env .
+# Environment variables are passed at runtime, so we don't copy .env here
 
 # Copy pre-trained artifacts
 # Make sure you've run the DVC/Training pipeline before building!
