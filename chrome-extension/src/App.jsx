@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PlayCircle, BarChart3, Loader2, AlertCircle, ThumbsUp, ThumbsDown, Minus } from 'lucide-react';
+import { PlayCircle, Sparkles, Loader2, AlertTriangle, ThumbsUp, ThumbsDown, Minus, Activity } from 'lucide-react';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -69,19 +69,20 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-[500px] w-[400px] bg-slate-950 text-slate-50 relative overflow-hidden">
+    <div className="flex flex-col items-center min-h-[550px] w-[400px] bg-[#09090b] text-zinc-50 relative overflow-hidden font-sans select-none">
       
-      {/* Background Decorators */}
-      <div className="absolute top-[-50px] left-[-50px] w-48 h-48 bg-red-500 rounded-full blur-[100px] opacity-20"></div>
-      <div className="absolute bottom-[-50px] right-[-50px] w-48 h-48 bg-blue-500 rounded-full blur-[100px] opacity-20"></div>
+      {/* Background Decorators - Glowing Orbs */}
+      <div className="absolute top-[-20%] left-[-20%] w-64 h-64 bg-violet-600 rounded-full mix-blend-screen filter blur-[120px] opacity-40 animate-pulse"></div>
+      <div className="absolute bottom-[-20%] right-[-20%] w-64 h-64 bg-fuchsia-600 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-pulse" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute top-[40%] right-[-10%] w-48 h-48 bg-blue-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
 
       {/* Header */}
-      <div className="w-full flex items-center justify-between p-5 border-b border-white/10 bg-white/5 backdrop-blur-md z-10">
+      <div className="w-full flex items-center justify-between p-5 border-b border-white/5 bg-[#09090b]/60 backdrop-blur-xl z-10 shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-red-500/20 rounded-xl">
-            <PlayCircle className="w-6 h-6 text-red-500" />
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-500/20 to-fuchsia-500/20 border border-white/10 shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+            <Activity className="w-5 h-5 text-violet-400" />
           </div>
-          <h1 className="text-lg font-bold tracking-tight bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent">
+          <h1 className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
             SentyTube
           </h1>
         </div>
@@ -91,84 +92,134 @@ function App() {
       <div className="flex-1 w-full p-6 flex flex-col items-center justify-center gap-6 z-10">
         
         {!loading && !results && !error && (
-          <div className="flex flex-col items-center text-center gap-4 animate-in fade-in zoom-in duration-500">
-            <div className="p-4 bg-slate-800/50 rounded-full border border-white/5 shadow-xl mb-2">
-              <BarChart3 className="w-10 h-10 text-blue-400" />
+          <div className="flex flex-col items-center text-center gap-5 animate-in fade-in zoom-in duration-700">
+            <div className="relative group cursor-default">
+              <div className="absolute -inset-1 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative p-5 bg-[#09090b] ring-1 ring-white/10 rounded-full shadow-2xl">
+                <Sparkles className="w-12 h-12 text-fuchsia-400 drop-shadow-[0_0_15px_rgba(232,121,249,0.5)]" />
+              </div>
             </div>
-            <h2 className="text-xl font-semibold text-white">Vibe Check!</h2>
-            <p className="text-sm text-slate-400 leading-relaxed px-4">
-              Click the button below to instantly scan the top comments of the current video and analyze the audience sentiment.
-            </p>
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold tracking-tight text-white drop-shadow-md">AI Sentiment Radar</h2>
+              <p className="text-[13px] text-zinc-400 leading-relaxed max-w-[280px] mx-auto font-medium">
+                Tap below to run our neural network on the top comments. Discover exactly how the audience feels right now.
+              </p>
+            </div>
           </div>
         )}
 
         {loading && (
-          <div className="flex flex-col items-center gap-4 animate-in fade-in duration-300">
-            <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
-            <p className="text-sm font-medium text-slate-300 animate-pulse">Running Neural Networks...</p>
+          <div className="flex flex-col items-center gap-6 animate-in fade-in duration-500">
+            <div className="relative flex items-center justify-center">
+              <div className="absolute w-20 h-20 border-4 border-violet-500/30 rounded-full animate-ping"></div>
+              <Loader2 className="w-12 h-12 text-fuchsia-400 animate-spin drop-shadow-[0_0_10px_rgba(232,121,249,0.8)]" />
+            </div>
+            <div className="space-y-1 text-center">
+              <p className="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 animate-pulse">
+                Analyzing Audience...
+              </p>
+              <p className="text-xs text-zinc-500">Extracting emotional nuances</p>
+            </div>
           </div>
         )}
 
         {error && (
-          <div className="w-full p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex flex-col items-center text-center gap-2 animate-in slide-in-from-bottom-4 duration-300">
-            <AlertCircle className="w-8 h-8 text-red-400" />
-            <p className="text-sm text-red-200">{error}</p>
+          <div className="w-full p-5 bg-rose-500/5 border border-rose-500/20 rounded-2xl flex flex-col items-center text-center gap-3 shadow-[0_0_30px_rgba(244,63,94,0.1)] backdrop-blur-md animate-in slide-in-from-bottom-4 duration-300">
+            <AlertTriangle className="w-10 h-10 text-rose-400 drop-shadow-[0_0_10px_rgba(244,63,94,0.5)]" />
+            <p className="text-sm font-medium text-rose-200/90 leading-snug">{error}</p>
           </div>
         )}
 
         {results && (
-          <div className="w-full flex flex-col gap-5 animate-in slide-in-from-bottom-6 duration-500">
-            <div className="text-center">
-              <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Analysis Complete</p>
-              <h2 className="text-3xl font-bold text-white">{results.total} <span className="text-lg text-slate-500 font-normal">Comments</span></h2>
+          <div className="w-full flex flex-col gap-6 animate-in slide-in-from-bottom-8 duration-700">
+            
+            {/* Summary Banner */}
+            <div className="relative overflow-hidden rounded-2xl p-5 border border-white/5 bg-white/[0.02] shadow-2xl flex items-center justify-between">
+              <div className="absolute inset-0 bg-gradient-to-r from-violet-600/10 to-fuchsia-600/10 mix-blend-overlay"></div>
+              <div className="z-10 flex flex-col">
+                <p className="text-[11px] text-zinc-400 uppercase tracking-widest font-bold mb-1">Audience Vibe</p>
+                <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400 drop-shadow-sm">
+                  {results.positive > results.negative ? 'Positive' : (results.negative > results.positive ? 'Negative' : 'Mixed')}
+                </h2>
+              </div>
+              <div className="z-10 flex flex-col items-end">
+                <span className="text-2xl font-bold text-white">{results.total}</span>
+                <span className="text-[10px] text-zinc-500 uppercase font-semibold">Comments</span>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-3">
+            {/* Progress Bars */}
+            <div className="flex flex-col gap-5 px-1">
+              
               {/* Positive */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex justify-between items-center text-sm font-medium">
-                  <div className="flex items-center gap-2 text-emerald-400"><ThumbsUp className="w-4 h-4" /> Positive</div>
-                  <span className="text-emerald-400">{results.positive}%</span>
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center text-sm font-bold">
+                  <div className="flex items-center gap-2 text-emerald-400">
+                    <ThumbsUp className="w-4 h-4" /> 
+                    <span className="tracking-wide">Positive</span>
+                  </div>
+                  <span className="text-emerald-300 text-lg drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]">{results.positive}%</span>
                 </div>
-                <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-emerald-500 transition-all duration-1000 ease-out" style={{ width: `${results.positive}%` }}></div>
+                <div className="w-full h-3 bg-[#18181b] rounded-full overflow-hidden border border-white/5 shadow-inner">
+                  <div className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(52,211,153,0.8)] rounded-full" style={{ width: `${results.positive}%` }}></div>
                 </div>
               </div>
 
               {/* Neutral */}
-              <div className="flex flex-col gap-1.5 mt-2">
-                <div className="flex justify-between items-center text-sm font-medium">
-                  <div className="flex items-center gap-2 text-slate-400"><Minus className="w-4 h-4" /> Neutral</div>
-                  <span className="text-slate-400">{results.neutral}%</span>
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center text-sm font-bold">
+                  <div className="flex items-center gap-2 text-zinc-400">
+                    <Minus className="w-4 h-4" /> 
+                    <span className="tracking-wide">Neutral</span>
+                  </div>
+                  <span className="text-zinc-300 text-lg">{results.neutral}%</span>
                 </div>
-                <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-slate-500 transition-all duration-1000 ease-out" style={{ width: `${results.neutral}%` }}></div>
+                <div className="w-full h-3 bg-[#18181b] rounded-full overflow-hidden border border-white/5 shadow-inner">
+                  <div className="h-full bg-gradient-to-r from-zinc-600 to-zinc-400 transition-all duration-1000 ease-out rounded-full" style={{ width: `${results.neutral}%` }}></div>
                 </div>
               </div>
 
               {/* Negative */}
-              <div className="flex flex-col gap-1.5 mt-2">
-                <div className="flex justify-between items-center text-sm font-medium">
-                  <div className="flex items-center gap-2 text-rose-400"><ThumbsDown className="w-4 h-4" /> Negative</div>
-                  <span className="text-rose-400">{results.negative}%</span>
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center text-sm font-bold">
+                  <div className="flex items-center gap-2 text-rose-400">
+                    <ThumbsDown className="w-4 h-4" /> 
+                    <span className="tracking-wide">Negative</span>
+                  </div>
+                  <span className="text-rose-300 text-lg drop-shadow-[0_0_5px_rgba(2fb,113,133,0.5)]">{results.negative}%</span>
                 </div>
-                <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-rose-500 transition-all duration-1000 ease-out" style={{ width: `${results.negative}%` }}></div>
+                <div className="w-full h-3 bg-[#18181b] rounded-full overflow-hidden border border-white/5 shadow-inner">
+                  <div className="h-full bg-gradient-to-r from-rose-600 to-rose-400 transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(2fb,113,133,0.8)] rounded-full" style={{ width: `${results.negative}%` }}></div>
                 </div>
               </div>
+
             </div>
           </div>
         )}
       </div>
 
       {/* Footer / Action */}
-      <div className="w-full p-6 pt-0 z-10">
+      <div className="w-full p-6 pt-2 pb-8 z-10">
         <button 
           onClick={analyzeComments} 
           disabled={loading}
-          className="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-semibold shadow-lg shadow-blue-900/50 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="relative group w-full disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {loading ? 'Analyzing...' : (results ? 'Analyze Again' : 'Analyze Video')}
+          {/* Animated Glow Behind Button */}
+          {!loading && <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-blue-600 rounded-2xl blur opacity-60 group-hover:opacity-100 transition duration-500 group-hover:duration-200 animate-gradient-xy"></div>}
+          
+          <div className="relative w-full py-4 px-6 bg-[#09090b] border border-white/10 group-hover:border-white/20 rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 group-active:scale-[0.98]">
+            {loading ? (
+              <span className="text-sm font-bold tracking-wide text-zinc-300">Processing Data...</span>
+            ) : (
+              <>
+                <span className="text-[15px] font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300">
+                  {results ? 'Scan Another Video' : 'Analyze Comments'}
+                </span>
+                <PlayCircle className="w-5 h-5 text-fuchsia-400" />
+              </>
+            )}
+          </div>
         </button>
       </div>
 
