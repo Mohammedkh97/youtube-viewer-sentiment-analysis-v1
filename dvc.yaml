@@ -1,0 +1,63 @@
+stages:
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion
+    deps:
+      - src/data/data_ingestion.py
+    params:
+      - data_ingestion.test_size
+    outs:
+      - data/raw
+
+
+  data_preprocessing:
+    cmd: python -m src.data.data_preprocessing
+    deps:
+      - data/raw/train.csv
+      - data/raw/test.csv
+      - src/data/data_preprocessing.py
+    outs:
+      - data/processed
+
+
+  model_building:
+    cmd: python -m src.model.model_building
+    deps:
+      - data/processed/train_processed.csv
+      - src/model/model_building.py
+    params:
+      - model_training.vectorizer
+      - model_training.max_features
+      - model_training.ngram_range
+      - model_training.imbalance_method
+      - model_training.learning_rate
+      - model_training.max_depth
+      - model_training.n_estimators
+      - bayesian_tuning.model_name
+      - bayesian_tuning.search_strategy
+      - bayesian_tuning.cv_strategy
+      - bayesian_tuning.n_splits
+      - bayesian_tuning.n_trials
+    outs:
+      - artifacts/model.joblib
+      - artifacts/preprocessor.joblib
+      - artifacts/label_encoder.joblib
+
+
+  model_evaluation:
+    cmd: python -m src.model.model_evaluation
+    deps:
+      - artifacts/model.joblib
+      - artifacts/preprocessor.joblib
+      - artifacts/label_encoder.joblib
+      - data/processed/train_processed.csv
+      - data/processed/test_processed.csv
+      - src/model/model_evaluation.py
+    outs:
+      - metrics/experiment_info.json
+
+
+  model_registration:
+    cmd: python -m src.model.register_model
+    deps:
+      - metrics/experiment_info.json
+      - src/model/register_model.py

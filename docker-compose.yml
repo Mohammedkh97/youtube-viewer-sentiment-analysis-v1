@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  fastapi_backend:
+    build: .
+    container_name: yt_sentiment_api
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - MLFLOW_TRACKING_URI=https://mlflow-dashboard.duckdns.org
+      - APP_PORT=8000
+      - APP_HOST=0.0.0.0
+      - DEBUG=False
+    volumes:
+      # Optional: Mount artifacts for live updating models without rebuilding container
+      - ./artifacts:/app/artifacts:ro

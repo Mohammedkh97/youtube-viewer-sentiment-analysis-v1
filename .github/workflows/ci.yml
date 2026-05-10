@@ -1,0 +1,50 @@
+name: FastAPI CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest httpx
+
+    - name: Lint with Ruff or Flake8 (Optional)
+      run: |
+        # pip install ruff
+        # ruff check src app
+
+    - name: Run Tests
+      run: |
+        # Replace with `pytest tests/` when unit tests are added
+        python -c "import app.main; print('FastAPI imported successfully!')"
+        
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Docker Image
+      run: |
+        # In a real scenario, you might pull DVC artifacts here before building
+        # dvc pull
+        docker build -t yt-sentiment-api:latest .
