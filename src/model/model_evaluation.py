@@ -57,7 +57,25 @@ def run_model_evaluation():
         "classification_report": report,
     }
 
-    # 4. Save metrics
+    # 4. Generate and save Confusion Matrix Plot
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.metrics import confusion_matrix
+
+    cm = confusion_matrix(y_test, y_pred)
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                xticklabels=label_encoder.classes_,
+                yticklabels=label_encoder.classes_)
+    plt.title(f"Confusion Matrix - {model_name}")
+    plt.ylabel("True Label")
+    plt.xlabel("Predicted Label")
+    
+    cm_path = settings.artifacts_dir / f"cm_{model_name}.png"
+    plt.savefig(cm_path, bbox_inches='tight')
+    plt.close()
+
+    # 5. Save metrics
     metrics_dir = Path("metrics")
     metrics_dir.mkdir(parents=True, exist_ok=True)
     output_path = metrics_dir / "experiment_info.json"
