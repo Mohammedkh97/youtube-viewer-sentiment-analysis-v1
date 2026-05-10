@@ -1,9 +1,11 @@
+# pyrefly: ignore [missing-import]
 from fastapi import APIRouter, Depends
 from src.schemas.response import HealthResponse
 from app.dependencies import get_prediction_service
 from src.services.prediction_service import PredictionService
 
 router = APIRouter(tags=["Health"])
+
 
 @router.get("/", response_model=HealthResponse)
 def health_check(service: PredictionService = Depends(get_prediction_service)):

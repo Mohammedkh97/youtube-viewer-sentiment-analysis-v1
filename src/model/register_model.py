@@ -2,17 +2,25 @@
 DVC Stage 5: Model Registration
 Reads experiment_info.json and registers the model + metrics in MLflow.
 """
+
 import json
 import joblib
 import logging
+
+# pyrefly: ignore [missing-import]
 import mlflow
+
+# pyrefly: ignore [missing-import]
 import mlflow.sklearn
 from pathlib import Path
 
 from src.config.settings import settings
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 def run_model_registration():
     logger.info("🚀 Stage 5: Model Registration...")
@@ -55,7 +63,10 @@ def run_model_registration():
         # Log experiment_info.json itself
         mlflow.log_artifact(str(experiment_path))
 
-    logger.info(f"✅ Model Registration complete. Registered to MLflow: {settings.mlflow_tracking_uri}")
+    logger.info(
+        f"✅ Model Registration complete. Registered to MLflow: {settings.mlflow_tracking_uri}"
+    )
+
 
 if __name__ == "__main__":
     run_model_registration()

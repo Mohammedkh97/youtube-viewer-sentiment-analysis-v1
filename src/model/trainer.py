@@ -1,5 +1,9 @@
 import os
+
+# pyrefly: ignore [missing-import]
 import mlflow
+
+# pyrefly: ignore [missing-import]
 import mlflow.sklearn
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -18,6 +22,7 @@ from src.config.settings import settings
 
 logger = logging.getLogger(__name__)
 
+
 class ImbalanceHandlerFactory:
     @staticmethod
     def get(name: str, random_state=42):
@@ -30,18 +35,20 @@ class ImbalanceHandlerFactory:
         }
         return handlers.get(name)
 
+
 class Trainer:
     """
     Orchestrates the full training pipeline:
         encode -> split -> vectorize -> (optionally resample) -> tune/train -> evaluate -> MLflow log
     """
+
     def __init__(
         self,
         experiment_name="YouTube_Sentiment_Pipeline",
         text_column="clean_comment",
         target_column="category",
         test_size=0.2,
-        random_state=42
+        random_state=42,
     ):
         self.text_column = text_column
         self.target_column = target_column
@@ -81,12 +88,16 @@ class Trainer:
             X, y, test_size=self.test_size, random_state=self.random_state, stratify=y
         )
 
-        vectorizer = VectorizerFactory.get(vectorizer_name, ngram_range=ngram_range, max_features=max_features)
+        vectorizer = VectorizerFactory.get(
+            vectorizer_name, ngram_range=ngram_range, max_features=max_features
+        )
         X_train_vec = vectorizer.fit_transform(X_train)
         X_test_vec = vectorizer.transform(X_test)
 
         if imbalance_method != "class_weights":
-            sampler = ImbalanceHandlerFactory.get(imbalance_method, random_state=self.random_state)
+            sampler = ImbalanceHandlerFactory.get(
+                imbalance_method, random_state=self.random_state
+            )
             if sampler:
                 X_train_vec, y_train = sampler.fit_resample(X_train_vec, y_train)
 
@@ -116,7 +127,7 @@ class Trainer:
             mlflow.log_param("model", model_name)
             mlflow.log_param("imbalance_method", imbalance_method)
             mlflow.log_param("search_strategy", search_strategy)
-            
+
             model.fit(X_train_vec, y_train)
             y_pred = model.predict(X_test_vec)
 
@@ -127,7 +138,7 @@ class Trainer:
             mlflow.log_metric("f1_macro", report["macro avg"]["f1-score"])
 
             logger.info(f"Accuracy: {acc:.4f}")
-            
+
             # Save artifacts locally and in MLFlow
             os.makedirs(settings.artifacts_dir, exist_ok=True)
             cm = confusion_matrix(y_test, y_pred)
@@ -137,7 +148,7 @@ class Trainer:
             cm_path = settings.artifacts_dir / f"cm_{model_name}_{search_strategy}.png"
             plt.savefig(cm_path)
             plt.close()
-            
+
             mlflow.log_artifact(cm_path)
             mlflow.sklearn.log_model(model, artifact_path="model")
 
