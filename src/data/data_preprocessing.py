@@ -29,6 +29,10 @@ def run_data_preprocessing():
         df_clean = loader._clean_structure(df)
         df_clean = transformer.transform(df_clean)
 
+        # Drop rows where text became NaN or empty after cleaning
+        df_clean = df_clean.dropna(subset=["clean_comment"])
+        df_clean = df_clean[df_clean["clean_comment"].str.strip() != ""]
+
         output_path = output_dir / f"{split}_processed.csv"
         df_clean.to_csv(output_path, index=False)
         logger.info(f"  Saved {output_path} | Shape: {df_clean.shape}")

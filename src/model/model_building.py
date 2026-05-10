@@ -28,6 +28,9 @@ def run_model_building():
     text_column = "clean_comment"
     target_column = "category"
 
+    # Ensure no NaNs creep in from pandas read_csv
+    df = df.dropna(subset=[text_column])
+    
     X = df[text_column]
     label_encoder = LabelEncoder()
     y = label_encoder.fit_transform(df[target_column])

@@ -27,6 +27,7 @@ def run_model_evaluation():
     # 2. Load test data
     test_path = Path("data/processed/test_processed.csv")
     df_test = pd.read_csv(test_path)
+    df_test = df_test.dropna(subset=["clean_comment"])
     logger.info(f"Test data loaded. Shape: {df_test.shape}")
 
     X_test = df_test["clean_comment"]
