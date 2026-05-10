@@ -1,0 +1,27 @@
+data_ingestion:
+  test_size: 0.20
+
+model_training:
+  vectorizer: "tfidf"
+  ngram_range: [1, 3]
+  max_features: 10000
+  imbalance_method: "oversampling" # options: oversampling, adasyn, undersampling, smote_enn, class_weights
+  learning_rate: 0.09
+  max_depth: 20
+  n_estimators: 367
+
+# Bayesian Optimization Parameters
+bayesian_tuning:
+  model_name: "lightgbm"
+  search_strategy: "bayesian"
+  cv_strategy: "stratified_kfold"
+  n_splits: 5
+  n_trials: 30
+
+# Alternative: Random Search (used when search_strategy is overridden)
+random_search:
+  model_name: "lightgbm"
+  search_strategy: "random"
+  cv_strategy: "kfold"
+  n_splits: 5
+  n_iter: 20
