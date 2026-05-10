@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Viewer Sentiment",
+  "version": "1.0.0",
+  "description": "Analyze YouTube video comments sentiment using FastAPI",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://www.youtube.com/*",
+    "https://www.googleapis.com/*",
+    "http://localhost:8000/*"
+  ]
+}
